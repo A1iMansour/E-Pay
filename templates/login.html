@@ -1,0 +1,28 @@
+{% extends "main.html"%}
+{% block content%}
+
+<div class="content-section">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <div class="border-top">
+        <p class="tect-muted">
+            <a href="#">Forgot password, Reset?</a>
+        </p>
+
+    </div>
+
+</div>
+{% endblock%}
+
+
+
+
+
+
