@@ -1,0 +1,44 @@
+<script>
+    $(document).ready(function() {
+        $('#mark-as-seen-button').click(function(event) {
+            event.preventDefault(); 
+            var form = $('#mark-notification-form');
+            $.ajax({
+                url: form.attr('action'),  
+                method: form.attr('method'),  
+                data: form.serialize(),  
+                success: function(response) {
+                    console.log('Notifications marked as seen.');
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $('input[name="notification_ids"]').change(function() {
+            var selectedCheckboxes = $('input[name="notification_ids"]:checked').length;
+            if (selectedCheckboxes > 0) {
+                $('#mark-as-seen-button').show();
+            } else {
+                $('#mark-as-seen-button').hide();
+            }
+        });
+    });
+</script>
+
+<ul>
+    <form id="mark-notification-form" method="POST" action="{% url 'mark_notification_seen' %}">
+        {% csrf_token %}
+        {% for notification in notifications %}
+            {% if notification.user == request.user %}
+                <li>
+                    <label for="notification_{{ notification.id }}">{{ notification.message }}</label>
+                    <input type="checkbox" name="notification_ids" id="notification_{{ notification.id }}" value="{{ notification.id }}">
+                </li>
+            {% endif %}
+        {% endfor %}
+    </form>
+</ul>
+
+<button type="button" id="mark-as-seen-button" style="display: none;">Mark Selected as Seen</button>

@@ -1,5 +1,5 @@
 from django.db import models
-import datetime
+from django.contrib.auth.models import User
 
 
 class me(models.Model):
@@ -16,17 +16,9 @@ CURRENCY=(
 )
 
 class Usermoney(models.Model):
+    user=  models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_money', default=None)
     currency = models.CharField(max_length=1, choices=CURRENCY)
-
+    balance = models.DecimalField(default= 100, decimal_places=4, max_digits=11)
     def __str__(self):
-       return self.currency
+       return f'{self.currency} {self.balance}'
 
-class Payment(models.Model):
-    userfrom= models.CharField(max_length=100)
-    userto= models.CharField(max_length=100)
-    done = models.BooleanField( default=False) # if payment is successful=> true
-    payment= models.DecimalField(default= 0, decimal_places=4, max_digits=11)
-    currency = models.CharField(max_length=1, choices=CURRENCY)
-    dat= models.DateField(default=datetime.datetime.today)  
-    def __str__(self):
-       return f'{self.userfrom} {self.userto}'

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import me
+from .models import me, Usermoney
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
@@ -23,6 +23,8 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
+            currency = form.cleaned_data['currency']
+            Usermoney.objects.create(user=user, currency=currency, balance=100)
             login(request, user)
             messages.success(request, 'Your account was created successfully!')
             return redirect('homefunc')

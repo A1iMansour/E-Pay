@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'register.apps.UsersConfig',
-    #'register.apps.RegisterConfig',
+    'payapp.apps.PayappConfig',
 ]
 
 MIDDLEWARE = [

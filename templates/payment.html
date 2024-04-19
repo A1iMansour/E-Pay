@@ -1,0 +1,81 @@
+{% extends "main.html"%}
+
+{% block content%}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+           
+            <div class="content-section">
+                <h3>Current Balance</h3>
+                <p class='text-muted'></p>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">in USD</li>
+                    <li class="list-group-item list-group-item-light">in Euro</li>
+                    <li class="list-group-item list-group-item-light">in GBP</li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-7">
+            
+        <h1>Pay Invoice</h1>
+
+        <form method="post">
+            <!--
+            <div class="form-group">
+                <label for="PaymentAmount">Payment amount</label>
+                <div class="amount-placeholder">
+                    <span>$</span>
+                    <span>500.00</span>
+                </div>
+            </div>-->
+            {% csrf_token %}
+            {{ form.as_p }}
+
+
+            <button  class="btn btn-block btn-success submit-button" type="submit">
+                <span class="submit-button-lock"></span>
+                <span class="align-middle">Pay</span>
+            </button>
+        </form>
+        <br>
+
+
+
+        </div>
+    </div>
+
+    <a href= {% url 'requestfunc' %}>
+
+        Request Money Instead?
+
+    </a>
+
+    <br>
+
+    <p>
+        Please note that EPay is not responsible for incorrect payments. <br>
+        Ensure that you are paying the correct user before proceeding with the payment.
+
+    </p>
+
+    <h5>Payment Safety Tips:</h5>
+    <ul>
+        <li>Use strong, unique passwords for your EPay account.</li>
+        <li>Enable two-factor authentication (2FA) for added security.</li>
+        <li>Avoid making payments over public Wi-Fi networks.</li>
+    </ul>
+
+    <br>
+</div>
+
+
+
+
+    
+ 
+
+
+{% endblock%}
