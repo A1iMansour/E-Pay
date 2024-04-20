@@ -12,5 +12,6 @@ urlpatterns = [
      path('paymentsuccess/', views.pay_success, name='pay_success'),
      path('fetch_notifications/', views.fetch_notifications, name='fetch_notifications'),
      path('mark_notification_seen/', views.mark_notification_seen, name='mark_notification_seen'),
+     path('userpayments/', views.userpayments, name='userpayments'),
 
 ]

@@ -9,13 +9,16 @@
            
             <div class="content-section">
                 <h3>Current Balance</h3>
-                <p class='text-muted'></p>
+                <p class='text-muted'>main currency {{currency}}</p>
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">in USD</li>
-                    <li class="list-group-item list-group-item-light">in Euro</li>
-                    <li class="list-group-item list-group-item-light">in GBP</li>
+                    <li class="list-group-item list-group-item-light">{{ balance }} in USD</li>
+                    <li class="list-group-item list-group-item-light">{{ balance }} in Euro</li>
+                    <li class="list-group-item list-group-item-light">{{ balance }} in GBP</li>
 
                 </ul>
+                <a href= {% url 'userpayments' %}>
+                    <h8>See transaction history </h8>
+                </a>
             </div>
         </div>
         <div class="col-md-7">

@@ -3,7 +3,7 @@ from .models import me, Usermoney
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .forms import SignUpForm
 
 # Create your views here.
@@ -15,8 +15,6 @@ def home(request):
 
 def about(request):
     return render(request,'about.html')
-
-
 
 def signup(request):
     if request.method == 'POST':
@@ -49,3 +47,6 @@ def loginf(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+def userlogout(request):
+    logout(request)  # Logout the user
+    return redirect('homefunc') 

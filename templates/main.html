@@ -1,7 +1,9 @@
+
+<!DOCTYPE html>
 {%load static%}
 
 
-<!DOCTYPE html>
+
 <html>
 
 <head>
@@ -89,7 +91,27 @@
                   });
               </script>
             </div>
-           
+
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                <button type="submit" class="logout-btn"
+                style="    background-color: #000101; /* Red color */
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;"
+                
+                
+                >Logout</button>
+                {% endif %}
+            </form>
+                      
           </div>
 
         </div>

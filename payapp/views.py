@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Request, Payment
+from register.models import Usermoney
 from .forms import RequestForm, PaymentForm
 from .models import Notify
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-
+from django.contrib import messages
 
 def mark_notification_seen(request):
     if request.method == 'POST':
@@ -15,6 +16,10 @@ def mark_notification_seen(request):
         return HttpResponse("Notifications marked as seen successfully.")
     else:
         return HttpResponse(status=405) 
+    
+def userpayments(request):
+    user_payments = Payment.objects.filter(userfrom=request.user) | Payment.objects.filter(userto=request.user)
+    return render(request, 'transaction.html', {'user_payments': user_payments})
 
 
 def fetch_notifications(request):
@@ -33,6 +38,9 @@ def request_success(request):
 
 @login_required
 def request(request):
+    user_money = Usermoney.objects.get(user=request.user)
+    balance = user_money.balance
+    currency= user_money.get_currency_display()
     if request.method == 'POST':
         form = RequestForm(request.POST)
         if form.is_valid():
@@ -47,21 +55,47 @@ def request(request):
     
     else:
         form = RequestForm()
-    return render(request, 'request.html', {'form': form})
+    context = {'form': form, 'balance': balance, 'currency':currency}
+    return render(request, 'request.html',  context)
 
 
 @login_required
 def pay(request):
+    user_money = Usermoney.objects.get(user=request.user)
+    balance = user_money.balance
+    currency= user_money.get_currency_display()
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
+            user_to_username = form.cleaned_data['userto']
+            paymentdone= form.cleaned_data['payment']
+            if paymentdone > balance:
+               
+                messages.error(request, 'Insufficient balance for this payment.')
+                return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
+
+            try:
+                receiver_user = User.objects.get(username=user_to_username)
+            except User.DoesNotExist:
+                
+                messages.error(request, 'Receiver user does not exist.')
+                return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
+            recieverbalance = Usermoney.objects.get(user=receiver_user)
+
+            recieverbalance.balance +=paymentdone
+            recieverbalance.save()
+            user_money.balance-=paymentdone
+            user_money.save()
+            
             new_request = form.save(commit=False)
             new_request.userfrom = request.user.username
             new_request.save()
             return redirect('pay_success')
     else:
         form = PaymentForm()
-    return render(request, 'payment.html', {'form': form})
+
+    context = {'form': form, 'balance': balance, 'currency':currency}
+    return render(request, 'payment.html', context)
 
 @login_required
 def pay_success(request):
