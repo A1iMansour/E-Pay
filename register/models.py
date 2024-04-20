@@ -10,14 +10,13 @@ class me(models.Model):
         return self.job
     
 CURRENCY=(
-    ('G', 'GB Pounds'),
-    ('U', 'US Dollars'),
-    ('E', 'Euros'),
+    ('GBP', 'GBP'),
+    ('USD', 'USD'),
+    ('EUR', 'EUR')
 )
-
 class Usermoney(models.Model):
     user=  models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_money', default=None)
-    currency = models.CharField(max_length=1, choices=CURRENCY)
+    currency = models.CharField(max_length=10, choices=CURRENCY)
     balance = models.DecimalField(default= 100, decimal_places=4, max_digits=11)
     def __str__(self):
        return f'{self.currency} {self.balance}'

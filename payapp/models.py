@@ -2,16 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 CURRENCY=(
-    ('G', 'GB Pounds'),
-    ('U', 'US Dollars'),
-    ('E', 'Euros'),
+    ('GBP', 'GBP'),
+    ('USD', 'USD'),
+    ('EUR', 'EUR')
 )
 # Create your models here.
 class Payment(models.Model):
     userfrom= models.CharField(max_length=100)
     userto= models.CharField(max_length=100)
     payment= models.DecimalField(default= 0, decimal_places=4, max_digits=11)
-    currency = models.CharField(max_length=1, choices=CURRENCY)
+    currency = models.CharField(max_length=10, choices=CURRENCY)
     dat= models.DateField(default=datetime.datetime.today)  
     def __str__(self):
        return f'from {self.userfrom} to {self.userto}'
@@ -20,7 +20,7 @@ class Request(models.Model):
     userfrom= models.CharField(max_length=100)
     userto= models.CharField(max_length=100)
     payment= models.DecimalField(default= 0, decimal_places=4, max_digits=11)
-    currency = models.CharField(max_length=1, choices=CURRENCY)
+    currency = models.CharField(max_length=10, choices=CURRENCY)
     dat= models.DateField(default=datetime.datetime.today)  
     def __str__(self):
        return f'from {self.userfrom} to {self.userto}'

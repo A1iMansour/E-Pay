@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Request, Payment
+from .models import Request, Payment,Notify
 from register.models import Usermoney
 from .forms import RequestForm, PaymentForm
-from .models import Notify
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
+import requests 
+from decimal import Decimal
+from django.contrib.admin.views.decorators import staff_member_required
+CURRENCY_EXCHANGE_API_URL = 'http://127.0.0.1:8000/api/convert/' 
 
 def mark_notification_seen(request):
     if request.method == 'POST':
@@ -69,38 +72,97 @@ def pay(request):
         if form.is_valid():
             user_to_username = form.cleaned_data['userto']
             paymentdone= form.cleaned_data['payment']
-            if paymentdone > balance:
-               
-                messages.error(request, 'Insufficient balance for this payment.')
-                return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
+            currnecypaid= form.cleaned_data['currency']
+            api_params = {
+                'amount': paymentdone,
+                'from_currency': currnecypaid,
+                'to_currency':currency ,
+            }
 
-            try:
-                receiver_user = User.objects.get(username=user_to_username)
-            except User.DoesNotExist:
+#########################################################
+            print(api_params)
+##########################################################
+
+
+            response = requests.get(CURRENCY_EXCHANGE_API_URL, params=api_params)
+
+
+            if response.status_code == 200:
+                converted_data = response.json()
+                converted_amount2 = converted_data.get('converted_amount', 0)
+
+                if converted_amount2 > balance:
                 
-                messages.error(request, 'Receiver user does not exist.')
-                return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
-            recieverbalance = Usermoney.objects.get(user=receiver_user)
+                    messages.error(request, 'Insufficient balance for this payment.')
+                    return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
 
-            recieverbalance.balance +=paymentdone
-            recieverbalance.save()
-            user_money.balance-=paymentdone
-            user_money.save()
-            
-            new_request = form.save(commit=False)
-            new_request.userfrom = request.user.username
-            new_request.save()
-            return redirect('pay_success')
+                try:
+                    receiver_user = User.objects.get(username=user_to_username)
+                except User.DoesNotExist:
+                    
+                    messages.error(request, 'Receiver user does not exist.')
+                    return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
+                recieverbalance = Usermoney.objects.get(user=receiver_user)
+
+                recievercurrency= recieverbalance.currency
+                api_params2 = {
+                    'amount': paymentdone,
+                    'from_currency': currnecypaid,
+                    'to_currency': recievercurrency,
+                }
+
+                response = requests.get(CURRENCY_EXCHANGE_API_URL, params=api_params2)
+
+
+                if response.status_code == 200:
+                    converted_data = response.json()
+                    converted_amount = converted_data.get('converted_amount', 0)
+
+
+                    print(converted_amount)
+                    print(recieverbalance.balance)
+                    recieverbalance.balance +=Decimal(converted_amount)
+                    recieverbalance.save()
+                    
+
+                    response = requests.get(CURRENCY_EXCHANGE_API_URL, params=api_params)
+
+
+                    
+                    user_money.balance-=Decimal(converted_amount2)
+                    user_money.save()
+                    
+                    new_request = form.save(commit=False)
+                    new_request.userfrom = request.user.username
+                    new_request.save()
+                    return redirect('pay_success')
+                else:
+                    messages.error(request, 'Failed to convert currency2. Please try again later.')
+                    return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currnecypaid})
+
+            else:
+                messages.error(request, 'Failed to convert currency1. Please try again later.')
+                return render(request, 'payment.html', {'form': form, 'balance': balance, 'currency': currency})
+
     else:
         form = PaymentForm()
 
     context = {'form': form, 'balance': balance, 'currency':currency}
     return render(request, 'payment.html', context)
 
+
+
+
+
+
+
+
 @login_required
 def pay_success(request):
     return render(request, 'paidsuc.html')
 
-
+@staff_member_required  
+def adminpage(request):
+    return render(request, 'admin.html')
 
 

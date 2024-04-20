@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 
 class SignUpForm(UserCreationForm):
     currency_choices = (
-        ('G', 'GB Pounds'),
-        ('U', 'US Dollars'),
-        ('E', 'Euros'),
+        ('GBP', 'GBP'),
+        ('USD', 'USD'),
+        ('EUR', 'EUR')
         # Add more currency options as needed
     )
     currency = forms.ChoiceField(choices=currency_choices)
