@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from .models import me, Usermoney
+from .models import  Usermoney
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .forms import SignUpForm
-
+from .forms import SignUpForm,AdminRegistrationForm
+from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 def home(request):
     #context={ 
@@ -50,3 +51,29 @@ def loginf(request):
 def userlogout(request):
     logout(request)  # Logout the user
     return redirect('homefunc') 
+
+
+
+
+
+@staff_member_required
+def register_admin(request):
+    if request.method == 'POST':
+        form = AdminRegistrationForm(request.POST)
+        if form.is_valid():
+
+            admin_new=User.objects.create_user(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+                is_staff=True,  
+                is_superuser=False, 
+            )
+            
+            currency = form.cleaned_data['currency']
+            Usermoney.objects.create(user=admin_new, currency=currency, balance=100)
+            return redirect('adminpage') 
+    else:
+        form = AdminRegistrationForm()
+
+    return render(request, 'registeradmin.html', {'form': form})

@@ -14,4 +14,5 @@ urlpatterns = [
      path('mark_notification_seen/', views.mark_notification_seen, name='mark_notification_seen'),
      path('userpayments/', views.userpayments, name='userpayments'),
      path('restricted/', views.adminpage, name='adminpage'),
+     
 ]

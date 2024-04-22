@@ -20,3 +20,16 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name','email', 'password1', 'password2']
+
+class AdminRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    currency_choices = (
+        ('GBP', 'GBP'),
+        ('USD', 'USD'),
+        ('EUR', 'EUR')
+        # Add more currency options as needed
+    )
+    currency = forms.ChoiceField(choices=currency_choices)
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']

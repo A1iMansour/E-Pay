@@ -1,0 +1,22 @@
+{% extends "main.html"%}
+{% block content%}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Registration</title>
+</head>
+<body>
+    <h1>Register New Administrator</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+
+
+{% endblock%}

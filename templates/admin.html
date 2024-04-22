@@ -9,9 +9,90 @@
     <title>Admin Restricted Page</title>
 </head>
 <body>
-    <h1>Welcome to the Admin Restricted Page</h1>
+    <h1>Welcome to the Admins Page</h1>
     <p>This page is only accessible to administrators.</p>
-</body>
+
+
+
+
+
+
+<head>
+    <title>User Payments</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 10px; 
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+
+    <h1>User Payments</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Payment Amount</th>
+                <th>Currency</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in user_payments %}
+            <tr>
+                <td>{{ payment.userfrom }}</td>
+                <td>{{ payment.userto }}</td>
+                <td>{{ payment.payment }}</td>
+                <td>{{ payment.currency }}</td>
+                <td>{{ payment.dat }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <h1>User Accounts</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Currency</th>
+                <th>Balance</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in useraccounts %}
+            <tr>
+                <td>{{ payment.user }}</td>
+                <td>{{ payment.currency }}</td>
+                <td>{{ payment.balance }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
+    <a href="{% url 'register_admin' %}">
+
+        <p>
+
+            register new admin?
+        </p>
+    </a>
+
 </html>
+
+
+
 
 {% endblock%}

@@ -163,6 +163,9 @@ def pay_success(request):
 
 @staff_member_required  
 def adminpage(request):
-    return render(request, 'admin.html')
+    user_payments = Payment.objects.all()
+    useraccounts= Usermoney.objects.all()
+    context = {'user_payments': user_payments, 'useraccounts': useraccounts}
+    return render(request, 'admin.html', context)
 
 
