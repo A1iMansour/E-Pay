@@ -12,24 +12,27 @@ An admin interface provides access to all user data and transactions.
 3. Secure admin interface for registering new admins and accessing all user info and transactions
 4. Support for different currencies (with currency conversion)
 
-## Installation
+## Setup
 
-1)Clone this repository: 
-git clone https://github.com/A1iMansour/E-Pay.git
-2)Create a virtual environment and activate it (recommended).
-3) install dependencies:
-pip install -r requirements.txt
-4)Create a superuser account (optional, for admin access):
-python manage.py createsuperuser
-5)Start the development server:
-python manage.py runserver
+### Installation
 
-## Usage
+1. **Clone this repository:** `git clone https://github.com/A1iMansour/E-Pay.git`
+2. **Create a virtual environment and activate it (recommended).**
+3. **Install dependencies:** `pip install -r requirements.txt`
+4. **Create a superuser account (optional, for admin access):** `python manage.py createsuperuser`
+5. **Start the development server:** `python manage.py runserver`
 
-1. Access the application in your web browser at http://127.0.0.1:8000/ (default development server address).
-2. Register for an account or login if you already have one.
-3. Use the provided functionalities to send/request money, view transactions, and manage your account.
-  (To log in to multiple user accounts simultaneously, use either a different web browser or a private window in your existing browser.)
-4. For admin access, use the credentials created during superuser creation.
+
+### Usage
+
+1. **Access the Application:** Open your web browser and navigate to http://127.0.0.1:8000/ (default development server address).
+2. **Register/Login:** Create an account if you're a new user or log in if you already have an account.
+3. **Functionality Overview:**
+   - Send/Request Money: Use the provided features to send or request money between registered users.
+   - View Transactions: Access your transaction history to track payments and receipts.
+   - Account Management: Manage your account settings and preferences.
+   - Multiple Sessions: To log in with multiple user accounts simultaneously, use a different web browser or a private window in your existing browser.
+4. **Admin Access:** If you have admin privileges (created during superuser setup), log in to access administrative features such as user management and transaction monitoring.
+
 
 
