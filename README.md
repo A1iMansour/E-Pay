@@ -5,11 +5,12 @@ This project implements a simplified online payment system similar to PayPal, bu
 Users can send and request money from each other, manage their accounts, and view transaction history. 
 An admin interface provides access to all user data and transactions.
 
-##Features
-1)User registration, login/logout
-2)Send and request money between registered users 
-3)Secure admin interface for registering new admins, and accessing all users info + transactions
-4)Support for different currencies (with currency conversion)
+**Features:**
+
+1. User registration, login/logout
+2. Send and request money between registered users
+3. Secure admin interface for registering new admins and accessing all user info and transactions
+4. Support for different currencies (with currency conversion)
 
 ## Installation
 
